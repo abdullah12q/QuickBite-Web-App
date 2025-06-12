@@ -53,27 +53,48 @@ export const createOrder = async (req, res) => {
       });
     }
 
-      totalAmount+=fixedDeliveryFees
-      
-      // Create the order
-      const newOrder = new orderModel({
-        userId,
-        paymentMethod,
-        address: orderAddress,
-        items: orderItems,
-        amount: totalAmount,
+    totalAmount += fixedDeliveryFees;
+
+    // Create the order
+    const newOrder = new orderModel({
+      userId,
+      paymentMethod,
+      address: orderAddress,
+      items: orderItems,
+      amount: totalAmount,
+    });
+
+    console.log("new order:", newOrder);
+
+    await newOrder.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "Order created successfully!",
+      order: newOrder,
+    });
+  } catch (error) {
+    console.error("Error creating order:", error);
+    return res.json({ success: false, message: "Internal server error." });
+  }
+};
+
+export const getUserOrders = async (req, res) => {
+  try {
+    const userOrders = await orderModel.find({ userId: req.query.userId });
+
+    if (!userOrders) {
+      return res.json({
+        success: false,
+        message: "Couldn't find orders for user",
       });
-  
-      await newOrder.save();
-      
-      return res.status(201).json({
-        success: true,
-        message: "Order created successfully!",
-        order: newOrder
-      });
-    } catch (error) {
-      console.error("Error creating order:", error);
-      return res.json({ success: false, message: "Internal server error." });
     }
-  };
-  
+
+    return res.status(201).json({
+      success: true,
+      userOrders,
+    });
+  } catch (err) {
+    return res.json({ success: false, message: "Couldn't fetch user orders." });
+  }
+};

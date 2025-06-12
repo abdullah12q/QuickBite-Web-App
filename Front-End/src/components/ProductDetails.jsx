@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import { useEffect } from "react";
 import { FaStar } from "react-icons/fa";
-import { getIsAdmin } from "../util/auth";
+import { getAuthToken, getIsAdmin } from "../util/auth";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -175,7 +175,7 @@ export default function ProductDetails() {
             <p className="text-gray-400 mb-6">{product.description}</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex-1 disabled:opacity-50 cursor-pointer"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex-1 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 onClick={() => handleAddToCart(product)}
                 disabled={getIsAdmin()}
               >
@@ -192,78 +192,82 @@ export default function ProductDetails() {
 
           {/* Feedback Form */}
           <div className="mt-10">
-            <h2 className="text-2xl font-semibold text-orange-500 mb-4">
-              Leave Your Feedback
-            </h2>
-            <form onSubmit={handleSubmitFeedback}>
-              <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
-                {error && <p className="text-red-500 mb-4">{error}</p>}
-                {successMessage && (
-                  <p className="text-green-500 mb-4">{successMessage}</p>
-                )}
-                <div>
-                  <div className="mb-4">
-                    <label
-                      htmlFor="username"
-                      className="block text-gray-300 text-sm font-bold mb-2"
-                    >
-                      Username:
-                    </label>
-                    <input
-                      type="text"
-                      id="username"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline bg-gray-700 focus:ring-2 focus:ring-orange-500 transition-all duration-200"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      required
-                    />
+            {getAuthToken() && (
+              <>
+                <h2 className="text-2xl font-semibold text-orange-500 mb-4">
+                  Leave Your Feedback
+                </h2>
+                <form onSubmit={handleSubmitFeedback}>
+                  <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+                    {error && <p className="text-red-500 mb-4">{error}</p>}
+                    {successMessage && (
+                      <p className="text-green-500 mb-4">{successMessage}</p>
+                    )}
+                    <div>
+                      <div className="mb-4">
+                        <label
+                          htmlFor="username"
+                          className="block text-gray-300 text-sm font-bold mb-2"
+                        >
+                          Username:
+                        </label>
+                        <input
+                          type="text"
+                          id="username"
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline bg-gray-700 focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          htmlFor="comment"
+                          className="block text-gray-300 text-sm font-bold mb-2"
+                        >
+                          Comment:
+                        </label>
+                        <textarea
+                          id="comment"
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline bg-gray-700 focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                          rows="3"
+                          required
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          htmlFor="rate"
+                          className="block text-gray-300 text-sm font-bold mb-2"
+                        >
+                          Rating (1-5):
+                        </label>
+                        <select
+                          id="rate"
+                          className="shadow border rounded py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline bg-gray-700 cursor-pointer focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                          value={rate}
+                          onChange={(e) => setRate(Number(e.target.value))} //e.target.value btrg3 string fa lazem a7wlha number
+                          required
+                        >
+                          {[1, 2, 3, 4, 5].map((num) => (
+                            <option key={num} value={num}>
+                              {num}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <button
+                        type="submit"
+                        className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer transition-colors duration-200"
+                      >
+                        Submit Feedback
+                      </button>
+                    </div>
                   </div>
-                  <div className="mb-4">
-                    <label
-                      htmlFor="comment"
-                      className="block text-gray-300 text-sm font-bold mb-2"
-                    >
-                      Comment:
-                    </label>
-                    <textarea
-                      id="comment"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline bg-gray-700 focus:ring-2 focus:ring-orange-500 transition-all duration-200"
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      rows="3"
-                      required
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label
-                      htmlFor="rate"
-                      className="block text-gray-300 text-sm font-bold mb-2"
-                    >
-                      Rating (1-5):
-                    </label>
-                    <select
-                      id="rate"
-                      className="shadow border rounded py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline bg-gray-700 cursor-pointer focus:ring-2 focus:ring-orange-500 transition-all duration-200"
-                      value={rate}
-                      onChange={(e) => setRate(Number(e.target.value))} //e.target.value btrg3 string fa lazem a7wlha number
-                      required
-                    >
-                      {[1, 2, 3, 4, 5].map((num) => (
-                        <option key={num} value={num}>
-                          {num}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <button
-                    type="submit"
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer transition-colors duration-200"
-                  >
-                    Submit Feedback
-                  </button>
-                </div>
-              </div>
-            </form>
+                </form>
+              </>
+            )}
 
             {/* display el feedbacks */}
             <div>

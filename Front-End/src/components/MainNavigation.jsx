@@ -12,11 +12,13 @@ export default function MainNavigation() {
     <header className="fixed top-0 left-0 w-full bg-gray-900 z-50 border-b border-gray-700">
       <nav className="flex justify-between items-center px-5">
         <div className="flex items-center gap-2">
-          <img
-            src="/logo-removebg-preview.png"
-            alt="QuickBite Logo"
-            className="h-16 w-auto object-contain"
-          />
+          <Link to="/">
+            <img
+              src="/logo-removebg-preview.png"
+              alt="QuickBite Logo"
+              className="h-16 w-auto object-contain"
+            />
+          </Link>
           <Link to="/" className="text-orange-500 text-xl font-bold">
             QuickBite
           </Link>

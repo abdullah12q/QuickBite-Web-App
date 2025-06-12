@@ -1,5 +1,4 @@
 import toast from "react-hot-toast";
-import { redirect } from "react-router-dom";
 import { getIsAdmin, getUserId } from "../util/auth";
 
 export function action() {
@@ -8,5 +7,10 @@ export function action() {
   if (getUserId()) localStorage.removeItem("userId");
   if (getIsAdmin()) localStorage.removeItem("isAdmin");
   toast.success("Logged out successfully!");
-  return redirect("/");
+
+  setTimeout(() => {
+    window.location.href = "/";
+  }, 1000);
+
+  return null;
 }

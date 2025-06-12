@@ -130,3 +130,22 @@ export async function deleteProduct(id) {
     throw new Error(data.message || "Failed to delete product");
   }
 }
+
+export async function getUserOrders(userId) {
+  const response = await fetch(
+    `http://localhost:5050/order/getUserOrders?userId=${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.message || "Failed to fetch orders");
+  }
+
+  return data.userOrders;
+}
