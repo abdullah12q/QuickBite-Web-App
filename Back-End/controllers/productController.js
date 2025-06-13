@@ -85,14 +85,6 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-const deleteAllProduct = async (req, res) => {
-  try {
-    await productModel.deleteMany({});
-    res.json({ success: true, message: "all products are deleted" });
-  } catch (error) {
-    res.status(500).json({ message: "Server Error" });
-  }
-};
 const getProduct = async (req, res) => {
   try {
     console.log(req.query);
@@ -110,7 +102,7 @@ const getProduct = async (req, res) => {
     res.json({ success: false, message: "server error" });
   }
 };
-const getAllProduct = async (req, res) => {
+const getAllProducts = async (req, res) => {
   try {
     const products = await productModel.find({});
     res.json({ success: true, products });
@@ -119,11 +111,4 @@ const getAllProduct = async (req, res) => {
   }
 };
 
-export {
-  addProduct,
-  updateProduct,
-  deleteProduct,
-  getProduct,
-  getAllProduct,
-  deleteAllProduct,
-};
+export { addProduct, updateProduct, deleteProduct, getProduct, getAllProducts };

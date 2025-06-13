@@ -91,6 +91,10 @@ export default function ProductDetails() {
   }
 
   function handleAddToCart(product) {
+    if (!getAuthToken()) {
+      toast.error("Please login to add to cart!");
+      return;
+    }
     addToCart(product);
     toast.success(`${product.name} added to cart!`);
   }
@@ -272,10 +276,10 @@ export default function ProductDetails() {
             {/* display el feedbacks */}
             <div>
               <h3 className="text-xl font-semibold text-orange-500 mb-4">
-                Customer Feedback
+                Customers Feedbacks
               </h3>
               {feedbacks.length === 0 ? (
-                <p className="text-gray-400">No feedback yet.</p>
+                <p className="text-gray-400">No feedbacks yet.</p>
               ) : (
                 <ul className="space-y-4">
                   {feedbacks.map((feedback, index) => (

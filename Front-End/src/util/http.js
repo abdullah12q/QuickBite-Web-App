@@ -27,9 +27,9 @@ export async function authenticate({ mode, formData }) {
   return data;
 }
 
-export async function getProducts() {
+export async function getProducts(searchTerm = "") {
   const response = await fetch(
-    "http://localhost:5050/api/product/getAllProduct"
+    "http://localhost:5050/api/product/getAllProducts"
   );
   const data = await response.json();
 
@@ -46,6 +46,15 @@ export async function getProducts() {
     image: `http://localhost:5050/images/${product.Image}`,
     description: product.Description,
   }));
+
+  if (searchTerm) {
+    return fixedProducts.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
 
   return fixedProducts;
 }
