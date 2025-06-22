@@ -5,7 +5,7 @@ import { useCart } from "../context/CartContext";
 export default function MainNavigation() {
   const token = useRouteLoaderData("root");
   const isAdmin = getIsAdmin();
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
@@ -97,13 +97,14 @@ export default function MainNavigation() {
             </li>
           )}
           {(token || isAdmin) && (
-            <li>
-              <Form method="post" action="/logout">
-                <button className="text-gray-400 hover:text-orange-500 cursor-pointer">
-                  Logout
-                </button>
-              </Form>
-            </li>
+            <Form method="post" action="/logout">
+              <button
+                className="text-gray-400 hover:text-orange-500 cursor-pointer"
+                onClick={clearCart}
+              >
+                Logout
+              </button>
+            </Form>
           )}
         </ul>
       </nav>

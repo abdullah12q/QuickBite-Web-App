@@ -7,8 +7,8 @@ const CartContext = createContext();
 const cartReducer = (state, action) => {
   switch (action.type) {
     // Add item to cart
-    case "ADD_TO_CART":
-      // Check if the item already exists in the cart
+    case "ADD_TO_CART": // Check if the item already exists in the cart
+    {
       const existingItem = state.find((item) => item.id === action.payload.id);
       if (existingItem) {
         // If it exists, increase its quantity by 1
@@ -20,6 +20,7 @@ const cartReducer = (state, action) => {
       }
       // If it doesn't exist, add it with quantity = 1
       return [...state, { ...action.payload, quantity: 1 }];
+    }
 
     // Remove an item from the cart
     case "REMOVE_FROM_CART":
