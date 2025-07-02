@@ -4,11 +4,19 @@ import { deleteProduct, getProducts, queryClient } from "../util/http";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
 import toast from "react-hot-toast";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import NewProduct from "../components/NewProduct";
+import EditProduct from "../components/EditProduct";
+
+import { motion } from "framer-motion";
 
 export default function AdminDashboard() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+  const [isOpenedNew, setIsOpenedNew] = useState(false);
+  const [isOpenedEdit, setIsOpenedEdit] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
 
   const {
     data: products = [],
@@ -17,7 +25,7 @@ export default function AdminDashboard() {
     error: productsError,
   } = useQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
+    queryFn: () => getProducts(),
   });
 
   const {
@@ -39,6 +47,11 @@ export default function AdminDashboard() {
       setProductToDelete(null);
     },
   });
+
+  function handleEditProduct(id) {
+    setProductToEdit(id);
+    setIsOpenedEdit(true);
+  }
 
   function handleStartDelete(id) {
     setProductToDelete(id);
@@ -63,16 +76,25 @@ export default function AdminDashboard() {
         <h1 className="text-3xl font-bold text-orange-500 tracking-tight">
           Admin Dashboard
         </h1>
-        <Link
-          to="/admin/dashboard/add-product"
-          className="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:from-orange-600 hover:to-orange-700 transition-all duration-200"
+        <button
+          className="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:from-orange-600 hover:to-orange-700 transition-all duration-200 cursor-pointer"
+          onClick={() => setIsOpenedNew(true)}
         >
           Add Product
-        </Link>
+        </button>
       </div>
+      <AnimatePresence mode="wait">
+        {isOpenedNew && <NewProduct onDone={() => setIsOpenedNew(false)} />}
+      </AnimatePresence>
 
       {/* Products Management Section */}
-      <div className="bg-linear-to-r from-gray-600 to-gray-900 rounded-lg shadow-lg overflow-hidden">
+      <motion.div
+        layout
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 500 }}
+        className="bg-linear-to-r from-gray-600 to-gray-900 rounded-lg shadow-lg overflow-hidden"
+      >
         <div className="p-6">
           <h2 className="text-2xl font-semibold text-gray-300">
             Products Management
@@ -132,19 +154,27 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <div className="flex space-x-3">
-                          <Link
-                            to={`/admin/dashboard/edit-product/${product.id}`}
-                            className="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors duration-150"
+                          <button
+                            className="text-blue-600 hover:text-blue-800 font-medium text-sm cursor-pointer"
+                            onClick={() => handleEditProduct(product.id)}
                           >
                             Edit
-                          </Link>
+                          </button>
                           <button
                             onClick={() => handleStartDelete(product.id)}
-                            className="text-red-600 hover:text-red-800 font-medium text-sm transition-colors duration-150 cursor-pointer"
+                            className="text-red-600 hover:text-red-800 font-medium text-sm cursor-pointer"
                           >
                             Delete
                           </button>
                         </div>
+                        <AnimatePresence mode="wait">
+                          {isOpenedEdit && productToEdit === product.id && (
+                            <EditProduct
+                              onDone={() => setIsOpenedEdit(false)}
+                              id={product.id}
+                            />
+                          )}
+                        </AnimatePresence>
                       </td>
                     </tr>
                   ))}
@@ -153,49 +183,52 @@ export default function AdminDashboard() {
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* (NewProduct, EditProduct) */}
       <Outlet />
 
-      {isDeleting && (
-        <Modal onClose={handleCancelDelete}>
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-white">
-              Are you sure you want to delete this product?
-            </h2>
-            {isPendingDelete && (
-              <p className="text-gray-400 text-center">
-                Deleting the product...
-              </p>
-            )}
-            {!isPendingDelete && (
-              <div className="flex justify-end space-x-3">
-                <button
-                  className="px-4 py-2 text-gray-300 hover:text-gray-100 font-medium text-sm transition-colors duration-150 cursor-pointer"
-                  onClick={handleCancelDelete}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-orange-500 text-white font-medium rounded-md hover:bg-orange-600 transition-colors duration-150 cursor-pointer"
-                  onClick={handleDelete}
-                >
-                  Delete Product
-                </button>
-              </div>
-            )}
-            {isDeletingError && (
-              <div className="py-6 text-center bg-gray-900 rounded-md">
-                <p className="text-red-500 text-lg font-medium">
-                  {deleteError.message || "Failed to delete the product."}
+      <AnimatePresence mode="wait">
+        {isDeleting && (
+          <Modal onClose={handleCancelDelete}>
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-white">
+                Are you sure you want to delete this product?
+              </h2>
+              {isPendingDelete && (
+                <p className="text-gray-400 text-center">
+                  Deleting the product...
                 </p>
-              </div>
-            )}
-          </div>
-        </Modal>
-      )}
+              )}
+              {!isPendingDelete && (
+                <div className="flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    className="px-4 py-2 text-gray-300 hover:text-gray-100 font-medium text-sm transition-colors duration-150 cursor-pointer"
+                    onClick={handleCancelDelete}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-orange-500 text-white font-medium rounded-md hover:bg-orange-600 transition-colors duration-150 cursor-pointer"
+                    onClick={handleDelete}
+                  >
+                    Delete Product
+                  </button>
+                </div>
+              )}
+              {isDeletingError && (
+                <div className="py-6 text-center bg-gray-900 rounded-md">
+                  <p className="text-red-500 text-lg font-medium">
+                    {deleteError.message || "Failed to delete the product."}
+                  </p>
+                </div>
+              )}
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

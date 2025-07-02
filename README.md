@@ -14,7 +14,7 @@ To run the frontend sucessfully isa, do the following:
 1- Be sure that your path end is QuickBite-Web-App/Front-End
 2- in terminal (ctrl + `) run the following commands,
 3- npm i
-4- npm i react-router-dom eslint-plugin-react react-hot-toast @tanstack/react-query yup tailwindcss @tailwindcss/vite react-icons formik
+4- npm i react-router-dom eslint-plugin-react react-hot-toast @tanstack/react-query yup tailwindcss @tailwindcss/vite react-icons formik framer-motion
 5- to run the web app on the browser run the following command,
 6- npm run dev
 

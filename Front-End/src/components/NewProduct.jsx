@@ -1,19 +1,16 @@
-import { useNavigate } from "react-router-dom";
 import ProductForm from "./ProductForm";
 import { useMutation } from "@tanstack/react-query";
 import { addProduct, queryClient } from "../util/http";
 import Modal from "./Modal";
 import toast from "react-hot-toast";
 
-export default function NewProduct() {
-  const navigate = useNavigate();
-
+export default function NewProduct({ onDone }) {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: addProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Product added successfully!");
-      navigate("../");
+      onDone();
     },
   });
 
@@ -22,7 +19,7 @@ export default function NewProduct() {
   }
 
   return (
-    <Modal onClose={() => navigate("../")}>
+    <Modal onClose={onDone}>
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold text-orange-500">
           Add New Product
@@ -35,8 +32,9 @@ export default function NewProduct() {
           {!isPending && (
             <div className="flex justify-end space-x-3">
               <button
+                type="button"
                 className="px-4 py-2 text-gray-300 hover:text-gray-100 font-medium text-sm transition-colors duration-150 cursor-pointer"
-                onClick={() => navigate("../")}
+                onClick={onDone}
               >
                 Cancel
               </button>

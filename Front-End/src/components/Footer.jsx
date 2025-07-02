@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 
+import { motion } from "framer-motion";
+
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 border-t border-gray-700 mt-auto">
+    <motion.footer
+      initial={{ opacity: 0, y: -20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      className="bg-gray-900 border-t border-gray-700 mt-auto"
+    >
       <div className="max-w-7xl mx-auto py-8 md:py-12 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -62,6 +69,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

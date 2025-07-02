@@ -1,9 +1,20 @@
 import { Link } from "react-router-dom";
 
+import { motion } from "framer-motion";
+
 export default function FormDetails({ texts, children }) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-800 ">
-      <div className="bg-linear-to-r from-gray-600 to-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md -mb-16">
+      <motion.div
+        variants={{
+          hidden: { opacity: 0, y: 100 },
+          visible: { opacity: 1, y: 0 },
+        }}
+        initial="hidden"
+        animate="visible"
+        transition={{ type: "spring", stiffness: 500 }}
+        className="bg-linear-to-r from-gray-600 to-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md -mb-16"
+      >
         <h2 className="text-2xl font-bold text-orange-500 mb-2 text-left">
           {texts.title}
         </h2>
@@ -18,7 +29,7 @@ export default function FormDetails({ texts, children }) {
             {texts.linkText}
           </Link>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -1,11 +1,22 @@
 import { FaRocket, FaStar, FaUser } from "react-icons/fa";
 import ProductGrid from "../components/ProductGrid";
 
+import { motion } from "framer-motion";
+
 export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-gray-900 py-20 overflow-hidden">
+      <motion.section
+        initial={{ opacity: 0, y: -50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          delay: 0.5,
+        }}
+        className="relative bg-gray-900 py-20 overflow-hidden"
+      >
         <div className="absolute inset-0 bg-gray-800 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-transparent opacity-90"></div>
         </div>
@@ -31,7 +42,7 @@ export default function HomePage() {
             </button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Menu Section */}
       <section id="menu" className="py-12 bg-gray-800">
@@ -44,7 +55,13 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-12 bg-gray-900">
+      <motion.section
+        layout
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="py-12 bg-gray-900"
+      >
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-white">
             Why Choose QuickBite?
@@ -89,10 +106,16 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gray-800">
+      <motion.section
+        layout
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="py-16 bg-gray-800"
+      >
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             Ready to Order?
@@ -112,7 +135,7 @@ export default function HomePage() {
             Browse Menu
           </button>
         </div>
-      </section>
+      </motion.section>
     </>
   );
 }

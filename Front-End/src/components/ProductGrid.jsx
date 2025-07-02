@@ -6,6 +6,8 @@ import { getProducts } from "../util/http";
 import LoadingSpinner from "./LoadingSpinner";
 import useDebounce from "../hooks/useDebounce";
 
+import { AnimatePresence, motion } from "framer-motion";
+
 export default function ProductGrid() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState(null);
@@ -45,21 +47,21 @@ export default function ProductGrid() {
       error?.message || searchError?.message || "Failed to fetch products";
 
     content = (
-      <div className="py-12 text-center">
+      <motion.div layout className="py-12 text-center">
         <p className="text-red-500 text-2xl">{errorMessage}</p>
-      </div>
+      </motion.div>
     );
   }
 
   let displayProducts = [];
   let emptyMessage = "";
 
-  if (!isPending && !isError && !searchTerm) {
+  if (!isPending && !isError && !debouncedSearchTerm) {
     displayProducts = activeCategory
       ? products.filter((product) => product.category === activeCategory)
       : products;
     emptyMessage = "No products found in this category.";
-  } else if (!isSearchLoading && !isSearchError && searchTerm) {
+  } else if (!isSearchLoading && !isSearchError && debouncedSearchTerm) {
     displayProducts = activeCategory
       ? searchResults.filter((product) => product.category === activeCategory)
       : searchResults;
@@ -69,9 +71,11 @@ export default function ProductGrid() {
   if (displayProducts.length > 0) {
     content = (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-        {displayProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        <AnimatePresence>
+          {displayProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </AnimatePresence>
       </div>
     );
   } else if (
@@ -79,9 +83,9 @@ export default function ProductGrid() {
     (debouncedSearchTerm || activeCategory)
   ) {
     content = (
-      <div className="py-12 text-center">
+      <motion.div layout className="py-12 text-center">
         <p className="text-gray-400">{emptyMessage}</p>
-      </div>
+      </motion.div>
     );
   }
 
@@ -89,7 +93,20 @@ export default function ProductGrid() {
     <div className="space-y-6">
       {/* Category Tabs */}
       <div className="flex justify-between">
-        <div className="flex overflow-x-auto pb-2 gap-2">
+        <motion.div
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                delayChildren: 0.5,
+                staggerChildren: 0.08,
+              },
+            },
+          }}
+          initial="hidden"
+          animate="visible"
+          className="flex pb-2 mb-2 gap-2"
+        >
           {["All", "Burgers", "Pizzas", "Drinks", "Desserts"].map((cat) => (
             <CategoryButton
               key={cat}
@@ -99,17 +116,19 @@ export default function ProductGrid() {
               text={cat}
             />
           ))}
-        </div>
+        </motion.div>
         <input
           type="text"
           placeholder="Search for a product"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-3 py-2 mr-12 rounded-md bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition duration-300"
+          className="px-3 mr-12 rounded-md bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition duration-300"
         />
       </div>
       {(isSearchLoading || isPending) && <LoadingSpinner />}
-      {content}
+      <AnimatePresence>
+        <div key={activeCategory || debouncedSearchTerm}>{content}</div>
+      </AnimatePresence>
     </div>
   );
 }

@@ -3,6 +3,8 @@ import { useCart } from "../context/CartContext";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
+import { motion } from "framer-motion";
+
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
 
@@ -17,14 +19,19 @@ export default function ProductCard({ product }) {
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden flex flex-col h-full transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 40 }}
+      className="bg-gray-800 rounded-lg shadow-md overflow-hidden flex flex-col h-full transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+    >
       <img
         src={product.image}
         alt={product.name}
         className="w-full h-80 object-cover"
       />
       <div className="p-4 flex flex-col flex-grow">
-        {/* <h3 className="text-lg font-bold text-white mb-2">{product.name}</h3> */}
         <Link
           to={`/products/${product.id}`}
           className="text-lg font-bold text-white mb-2 hover:text-orange-500"
@@ -42,6 +49,6 @@ export default function ProductCard({ product }) {
           </button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

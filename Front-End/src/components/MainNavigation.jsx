@@ -2,6 +2,8 @@ import { Form, Link, NavLink, useRouteLoaderData } from "react-router-dom";
 import { getIsAdmin } from "../util/auth";
 import { useCart } from "../context/CartContext";
 
+import { AnimatePresence, motion } from "framer-motion";
+
 export default function MainNavigation() {
   const token = useRouteLoaderData("root");
   const isAdmin = getIsAdmin();
@@ -24,7 +26,10 @@ export default function MainNavigation() {
           </Link>
         </div>
         <ul className="flex items-center gap-5">
-          <li>
+          <motion.li
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 400 }}
+          >
             <NavLink
               to="/"
               className={({ isActive }) =>
@@ -36,9 +41,12 @@ export default function MainNavigation() {
             >
               Home
             </NavLink>
-          </li>
+          </motion.li>
           {!isAdmin && (
-            <li>
+            <motion.li
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
               <NavLink
                 to="/cart"
                 className={({ isActive }) =>
@@ -47,29 +55,53 @@ export default function MainNavigation() {
                     : "text-gray-400 hover:text-orange-500"
                 }
               >
-                Cart({cartCount})
+                Cart(
+                <AnimatePresence mode="popLayout">
+                  <motion.span
+                    key={cartCount}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, x: 0, y: 0 }}
+                    exit={{ opacity: 0, y: -50 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                    }}
+                    className="inline-block"
+                  >
+                    {cartCount}
+                  </motion.span>
+                </AnimatePresence>
+                )
               </NavLink>
-            </li>
+            </motion.li>
           )}
           {!token && !isAdmin && (
             <>
-              <li>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <Link
                   to="/auth?mode=login"
                   className="text-gray-400 hover:text-orange-500"
                 >
                   Login
                 </Link>
-              </li>
-              <li>
-                <button className="bg-orange-500 text-gray-300 px-4 py-2 rounded-md hover:bg-orange-600">
-                  <Link to="/auth?mode=register">Register</Link>
-                </button>
-              </li>
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400 }}
+                className="bg-orange-500 text-gray-300 px-4 py-2 rounded-md hover:bg-orange-600"
+              >
+                <Link to="/auth?mode=register">Register</Link>
+              </motion.button>
             </>
           )}
           {token && !isAdmin && (
-            <li>
+            <motion.li
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
               <NavLink
                 to="/user/dashboard"
                 className={({ isActive }) =>
@@ -80,10 +112,13 @@ export default function MainNavigation() {
               >
                 Dashboard
               </NavLink>
-            </li>
+            </motion.li>
           )}
           {isAdmin && (
-            <li>
+            <motion.li
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
               <NavLink
                 to="/admin/dashboard"
                 className={({ isActive }) =>
@@ -94,16 +129,18 @@ export default function MainNavigation() {
               >
                 Admin Dashboard
               </NavLink>
-            </li>
+            </motion.li>
           )}
           {(token || isAdmin) && (
             <Form method="post" action="/logout">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400 }}
                 className="text-gray-400 hover:text-orange-500 cursor-pointer"
                 onClick={clearCart}
               >
                 Logout
-              </button>
+              </motion.button>
             </Form>
           )}
         </ul>

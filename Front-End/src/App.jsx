@@ -12,8 +12,6 @@ import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/Auth";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
-import NewProduct from "./components/NewProduct";
-import EditProduct from "./components/EditProduct";
 import CartPage from "./pages/Cart";
 import CheckoutPage from "./pages/Checkout";
 import ProductDetails from "./components/ProductDetails";
@@ -56,16 +54,6 @@ const router = createBrowserRouter([
         path: "admin/dashboard",
         element: <AdminDashboard />,
         loader: checkIsAdminLoader,
-        children: [
-          {
-            path: "add-product",
-            element: <NewProduct />,
-          },
-          {
-            path: "edit-product/:id",
-            element: <EditProduct />,
-          },
-        ],
       },
       {
         path: "logout",
