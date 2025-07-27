@@ -1,15 +1,12 @@
-import { useCart } from "../context/CartContext"; // Import cart context functions and data
-import { Link } from "react-router-dom"; // For navigation links
-import { useState, useEffect } from "react"; // React hooks
+import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function CartPage() {
-  // Destructure cart-related data and functions from context
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
 
-  // Local state to hold the calculated subtotal (items only)
   const [totalPrice, setTotalPrice] = useState(0);
 
-  // Recalculate total price whenever the cart changes
   useEffect(() => {
     const newTotalPrice = cart.reduce(
       (total, item) => total + item.price * item.quantity,
@@ -18,18 +15,15 @@ export default function CartPage() {
     setTotalPrice(newTotalPrice);
   }, [cart]);
 
-  // Constants
-  const deliveryFee = 50; // Fixed delivery fee
-  // Total = subtotal + delivery
+  const deliveryFee = 50;
   let total;
-      if (cart.length > 0) {
-          total = totalPrice + deliveryFee;
-      } else {
-      total = 0;
-    } 
-  const isEmpty = cart.length === 0; // Check if cart is empty
+  if (cart.length > 0) {
+    total = totalPrice + deliveryFee;
+  } else {
+    total = 0;
+  }
+  const isEmpty = cart.length === 0;
 
-  // Clear cart and reset subtotal
   const handleClearCart = () => {
     clearCart();
     setTotalPrice(0);
@@ -37,10 +31,9 @@ export default function CartPage() {
 
   return (
     <div className="bg-gray-900 text-white">
-      <div className="container mx-auto py-8 mt-14"> {/* Main container */}
+      <div className="container mx-auto py-8 mt-14">
         <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
 
-        {/* If cart is empty, show empty state message */}
         {isEmpty ? (
           <div className="text-center py-16">
             <h2 className="text-xl font-semibold mb-2">Your cart is empty</h2>
@@ -55,7 +48,6 @@ export default function CartPage() {
             </Link>
           </div>
         ) : (
-          // If cart is not empty, show cart items and order summary
           <div className="flex flex-col md:flex-row gap-6">
             {/* Left section: Cart items list */}
             <div className="md:w-3/4">
@@ -89,8 +81,8 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.id, item.quantity - 1)
                         }
-                        className="bg-gray-700 text-white px-3 py-2 rounded-l-lg hover:bg-gray-600 disabled:opacity-50 disabled:hover:bg-gray-700"
-                        disabled={item.quantity === 1} // Disable if quantity is already 1
+                        className="bg-gray-700 text-white px-3 py-2 rounded-l-lg hover:bg-gray-600 disabled:opacity-50 disabled:hover:bg-gray-700 cursor-pointer"
+                        disabled={item.quantity === 1}
                       >
                         -
                       </button>
@@ -99,7 +91,7 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.id, item.quantity + 1)
                         }
-                        className="bg-gray-700 text-white px-3 py-2 rounded-r-lg hover:bg-gray-600"
+                        className="bg-gray-700 text-white px-3 py-2 rounded-r-lg hover:bg-gray-600 cursor-pointer"
                       >
                         +
                       </button>

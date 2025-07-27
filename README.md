@@ -32,6 +32,7 @@ To run the frontend sucessfully isa, do the following:
     - [Notifications](#notifications)
     - [Icons](#icons)
     - [Styling](#styling)
+    - [Animations](#animations)
     - [Form Validation & User Inputs](#form-validation--user-inputs)
     - [Code Quality](#code-quality)
   - [Backend Dependencies](#backend-dependencies)
@@ -123,6 +124,11 @@ The following dependencies are used in the frontend:
 - **Customizations**:
   - Inputs and buttons use consistent styling (e.g., `bg-gray-700`, `rounded-md`).
   - Hover effects with `hover:bg-orange-600`, transitions with `transition duration-300`.
+
+#### Animations
+
+- `framer-motion`: Used to animate components and enhance user experience with smooth entrance/exit transitions, motion variants, and animated navigation.  
+  Examples include animated modals, smooth page transitions, and button hover effects across components like `Home` and `CategoryButton`.
 
 #### Form Validation & User Inputs
 

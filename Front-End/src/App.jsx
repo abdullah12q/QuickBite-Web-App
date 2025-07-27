@@ -14,7 +14,7 @@ import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import CartPage from "./pages/Cart";
 import CheckoutPage from "./pages/Checkout";
-import ProductDetails from "./components/ProductDetails";
+import ProductDetails from "./components/products/ProductDetails";
 
 const router = createBrowserRouter([
   {
@@ -73,8 +73,8 @@ function App() {
       <RouterProvider router={router} />
       <Toaster
         position="top-center"
-        duration={10000}
         toastOptions={{
+          duration: 4000,
           style: {
             background: "#222",
             color: "#FFA500",

@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import NotFound from "./NotFound";
-import LoginForm from "../components/LoginForm";
-import RegisterForm from "../components/RegisterForm";
+import LoginForm from "../components/forms/LoginForm";
+import RegisterForm from "../components/forms/RegisterForm";
 import { useMutation } from "@tanstack/react-query";
 import { authenticate } from "../util/http";
 import toast from "react-hot-toast";

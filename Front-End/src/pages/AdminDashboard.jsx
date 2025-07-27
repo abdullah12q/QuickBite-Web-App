@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteProduct, getProducts, queryClient } from "../util/http";
-import LoadingSpinner from "../components/LoadingSpinner";
-import Modal from "../components/Modal";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import Modal from "../components/ui/Modal";
 import toast from "react-hot-toast";
 import { Outlet } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import NewProduct from "../components/NewProduct";
-import EditProduct from "../components/EditProduct";
+import NewProduct from "../components/products/NewProduct";
+import EditProduct from "../components/products/EditProduct";
 
 import { motion } from "framer-motion";
 

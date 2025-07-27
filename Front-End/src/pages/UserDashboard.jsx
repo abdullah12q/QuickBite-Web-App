@@ -1,6 +1,6 @@
 import { useState } from "react";
-import UserProfile from "../components/UserProfile";
-import UserOrders from "../components/UserOrders";
+import UserProfile from "../components/user/UserProfile";
+import UserOrders from "../components/user/UserOrders";
 
 export default function UserDashboard() {
   const [buttonSelection, setButtonSelection] = useState("userProfile");

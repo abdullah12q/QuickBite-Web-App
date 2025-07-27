@@ -1,30 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuthToken, getUserId } from "../util/auth";
+import { getAuthToken, getUserId } from "../../util/auth";
 import toast from "react-hot-toast";
 
-// Profile component handles viewing and updating user info
 export default function UserProfile() {
-  // State for name and email fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  // State to track editing mode
   const [isEditing, setIsEditing] = useState(false);
 
-  // State for error and success messages
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
   const navigate = useNavigate();
   const userId = getUserId();
 
-  // Fetch user profile on mount
   useEffect(() => {
     const fetchProfile = async () => {
       const token = getAuthToken();
 
-      // If token is missing or expired, redirect to login
       if (!token || token === "EXPIRED") {
         setError("Invalid or expired token. Please log in.");
         navigate("/auth?mode=login");
@@ -47,7 +41,6 @@ export default function UserProfile() {
 
         const data = await response.json();
 
-        // Set fetched data to state
         setName(data.user.name);
         setEmail(data.user.email);
       } catch (error) {
@@ -59,12 +52,10 @@ export default function UserProfile() {
     fetchProfile();
   }, [navigate, userId]);
 
-  // Toggle edit mode
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
-  // Handle save click to update user data
   const handleSaveClick = async () => {
     const token = getAuthToken();
 
@@ -88,7 +79,6 @@ export default function UserProfile() {
         throw new Error(result.message || "Update failed");
       }
 
-      // Update state with new data
       setName(result.user.name);
       setEmail(result.user.email);
 
@@ -96,7 +86,6 @@ export default function UserProfile() {
       setSuccessMessage(result.message || "Profile updated successfully!");
       setError(null);
 
-      // Auto-clear success message after 3 seconds
       setTimeout(() => {
         setSuccessMessage(null);
       }, 3000);
@@ -113,13 +102,11 @@ export default function UserProfile() {
         Your Profile
       </h2>
 
-      {/* Show error or success message */}
       {error && <p className="text-red-500 mb-4">{error}</p>}
       {successMessage && (
         <p className="text-green-500 mb-4">{successMessage}</p>
       )}
 
-      {/* Display profile info or edit form */}
       {!isEditing ? (
         <>
           <p className="text-gray-300 mb-2">
@@ -131,7 +118,6 @@ export default function UserProfile() {
         </>
       ) : (
         <div>
-          {/* Editable input fields */}
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -165,7 +151,6 @@ export default function UserProfile() {
         </div>
       )}
 
-      {/* Button toggles between Edit and Save */}
       <button
         onClick={isEditing ? handleSaveClick : handleEditClick}
         className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"

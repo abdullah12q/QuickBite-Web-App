@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserId } from "../util/auth";
-import { getUserOrders } from "../util/http";
-import LoadingSpinner from "./LoadingSpinner";
+import { getUserId } from "../../util/auth";
+import { getUserOrders } from "../../util/http";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 export default function UserOrders() {
   const userId = getUserId();
+  console.log(userId);
   const {
     data: orders,
     isPending,

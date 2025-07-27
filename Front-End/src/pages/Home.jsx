@@ -1,5 +1,5 @@
 import { FaRocket, FaStar, FaUser } from "react-icons/fa";
-import ProductGrid from "../components/ProductGrid";
+import ProductGrid from "../components/products/ProductGrid";
 
 import { motion } from "framer-motion";
 
@@ -15,6 +15,7 @@ export default function HomePage() {
           stiffness: 500,
           delay: 0.5,
         }}
+        viewport={{ once: true }}
         className="relative bg-gray-900 py-20 overflow-hidden"
       >
         <div className="absolute inset-0 bg-gray-800 z-0">
@@ -60,6 +61,7 @@ export default function HomePage() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
+        viewport={{ once: true }}
         className="py-12 bg-gray-900"
       >
         <div className="max-w-7xl mx-auto px-4">
@@ -114,6 +116,7 @@ export default function HomePage() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
+        viewport={{ once: true }}
         className="py-16 bg-gray-800"
       >
         <div className="max-w-7xl mx-auto px-4 text-center">

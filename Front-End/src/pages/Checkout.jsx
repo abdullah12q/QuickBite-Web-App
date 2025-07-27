@@ -1,36 +1,29 @@
 import { useState, useEffect } from "react";
-import { useCart } from "../context/CartContext"; // Access cart context
-import { useNavigate } from "react-router-dom"; // For navigation after order
-import { getAuthToken, getUserId } from "../util/auth"; // Get user credentials
-import toast from "react-hot-toast"; // Notifications
+import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { getAuthToken, getUserId } from "../util/auth";
+import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
-  // Get cart items and cart actions
   const { cart, clearCart } = useCart();
 
-  // Used to navigate between pages
   const navigate = useNavigate();
 
-  // Auth information
   const userId = getUserId();
   const token = getAuthToken();
 
-  // Form state for user input
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     address: "",
-    paymentMethod: "cash_on_delivery", // Default method
+    paymentMethod: "cash_on_delivery",
   });
 
-  // Track if form is submitting
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Cart subtotal calculation
   const [subtotal, setSubtotal] = useState(0);
-  const deliveryFee = 50; // Flat delivery fee
+  const deliveryFee = 50;
 
-  // Recalculate subtotal whenever cart updates
   useEffect(() => {
     const newSubtotal = cart.reduce(
       (total, item) => total + item.price * item.quantity,
@@ -39,33 +32,28 @@ export default function CheckoutPage() {
     setSubtotal(newSubtotal);
   }, [cart]);
 
-  // Total cost = subtotal + delivery
   const total = subtotal + deliveryFee;
 
-  // Update form fields when user types
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // If cart is empty, show an error
     if (!cart.length) {
       toast.error("Your cart is empty!");
       return;
     }
 
     try {
-      // Send order to backend
       const res = await fetch("http://localhost:5050/order/place", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Authenticated request
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           userId,
@@ -78,16 +66,14 @@ export default function CheckoutPage() {
       const result = await res.json();
 
       if (!result.success) {
-        // If the backend responds with an error
         toast.error(result.message);
         throw new Error(result.message || "Update failed");
       }
 
-      // On success
       setIsSubmitting(false);
       toast.success("Order placed successfully! Your food is on the way.");
-      clearCart(); // Empty the cart
-      navigate("/"); // Redirect to homepage
+      clearCart();
+      navigate("/");
     } catch (error) {
       console.error("Error creating order:", error);
     }
@@ -160,7 +146,10 @@ export default function CheckoutPage() {
 
                 {/* Payment Method Select */}
                 <div>
-                  <label htmlFor="paymentMethod" className="block text-gray-400">
+                  <label
+                    htmlFor="paymentMethod"
+                    className="block text-gray-400"
+                  >
                     Payment Method
                   </label>
                   <select
@@ -180,7 +169,7 @@ export default function CheckoutPage() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-orange-500 text-white py-2 rounded-md font-semibold hover:bg-orange-600 transition duration-300 disabled:opacity-50"
+                  className="w-full bg-orange-500 text-white py-2 rounded-md font-semibold hover:bg-orange-600 transition duration-300 disabled:opacity-50 cursor-pointer"
                   disabled={isSubmitting}
                 >
                   Place Order
