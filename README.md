@@ -18,7 +18,7 @@ To run the frontend sucessfully isa, do the following:
 5- to run the web app on the browser run the following command,
 6- npm run dev
 
-# Food Delivery Application Documentation
+# Food Ordering Web App Documentation
 
 ## Table of Contents
 
