@@ -76,7 +76,7 @@ To run the frontend sucessfully isa, do the following:
 
 ## Overview
 
-This project is a React-based food delivery application named QuickBite that allows users to browse products, add them to a cart, leave feedback, edit profile information, add and edit products (admin functionality), and complete checkout. It uses a modern frontend stack with Tailwind CSS for styling and responsive design compatible with all devices, React Query for data fetching and mutations, and the Context API for state management and much more.
+This project is a React-based food delivery application named QuickBite that allows users to browse products, add them to a cart, leave feedback, edit profile information, add and edit products (admin functionality), and complete checkout. It uses a modern frontend stack with Tailwind CSS for styling and responsive design compatible with all devices, React Query for data fetching and mutations, Context API for state management, and Framer Motion for smooth and unique animations and much more.
 
 ## Project Purpose
 
@@ -848,3 +848,4 @@ GET /getFeedback?id=6812bd7a37a3d12eae5a6b7f
 
 - `404 Not Found`: Product not found (no feedback available).
 - `500 Internal Server Error`: An unexpected error occurred on the server.
+
