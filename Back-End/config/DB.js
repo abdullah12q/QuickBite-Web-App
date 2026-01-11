@@ -1,13 +1,33 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 
-dotenv.config();
+class Database {
+  constructor() {
+    if (Database.instance) {
+      return Database.instance;
+    }
 
-export const connectDB = async () => {
-  await mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => {
-      console.log("DB connected");
-    })
-    .catch((err) => console.error("DB connection failed:", err));
-};
+    this.connectionString = process.env.MONGODB_URI;
+
+    this.connection = this.connect();
+
+    Database.instance = this;
+  }
+
+  connect() {
+    mongoose
+      .connect(this.connectionString)
+      .then(() => console.log("Database Connection Successful (Singleton)"))
+      .catch((err) => console.error("Database Connection Error", err));
+
+    return mongoose.connection;
+  }
+
+  static getInstance() {
+    if (!Database.instance) {
+      new Database();
+    }
+    return Database.instance;
+  }
+}
+
+export default Database;
