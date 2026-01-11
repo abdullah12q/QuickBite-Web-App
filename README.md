@@ -1,22 +1,18 @@
-To run the backend sucessfully isa, do the following:
+To run the backend sucessfully, do the following:
 
 1- Be sure that your path end is QuickBite-Web-App/Back-End
 2- in terminal (ctrl + `) run the following commands,
 3- npm i
-4- npm i nodemon express bcrypt body-parser dotenv jsonwebtoken mongodb mongoose multer cors validator
-5- to run the backend server run the following command,
-6- npm run server
+4- npm run server
 
 ---
 
-To run the frontend sucessfully isa, do the following:
+To run the frontend sucessfully, do the following:
 
 1- Be sure that your path end is QuickBite-Web-App/Front-End
 2- in terminal (ctrl + `) run the following commands,
 3- npm i
-4- npm i react-router-dom eslint-plugin-react react-hot-toast @tanstack/react-query yup tailwindcss @tailwindcss/vite react-icons formik framer-motion
-5- to run the web app on the browser run the following command,
-6- npm run dev
+4- npm run dev
 
 # Food Ordering Web App Documentation
 
@@ -848,4 +844,5 @@ GET /getFeedback?id=6812bd7a37a3d12eae5a6b7f
 
 - `404 Not Found`: Product not found (no feedback available).
 - `500 Internal Server Error`: An unexpected error occurred on the server.
+
 
