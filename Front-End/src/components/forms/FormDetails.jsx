@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-
 import { motion } from "framer-motion";
 
 export default function FormDetails({ texts, children }) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-800 ">
+    <div className="flex items-center justify-center min-h-screen bg-gray-800 p-32">
       <motion.div
         variants={{
           hidden: { opacity: 0, y: 100 },
@@ -12,7 +11,7 @@ export default function FormDetails({ texts, children }) {
         }}
         initial="hidden"
         animate="visible"
-        transition={{ type: "spring", stiffness: 500 }}
+        transition={{ type: "spring" }}
         className="bg-linear-to-r from-gray-600 to-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md -mb-16"
       >
         <h2 className="text-2xl font-bold text-orange-500 mb-2 text-left">

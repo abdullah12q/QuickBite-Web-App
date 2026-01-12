@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { getAuthToken, getUserId } from "../util/auth";
 import toast from "react-hot-toast";
 
+const EXTRA_PRICES = {
+  extraCheese: 20,
+  spicySauce: 10,
+  makeItCombo: 50,
+};
+
 export default function CheckoutPage() {
   const { cart, clearCart } = useCart();
 
@@ -24,11 +30,18 @@ export default function CheckoutPage() {
   const [subtotal, setSubtotal] = useState(0);
   const deliveryFee = 50;
 
+  const getExtrasPrice = (extras = {}) => {
+    return Object.keys(extras).reduce((total, key) => {
+      return extras[key] ? total + EXTRA_PRICES[key] : total;
+    }, 0);
+  };
+
   useEffect(() => {
-    const newSubtotal = cart.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+    const newSubtotal = cart.reduce((total, item) => {
+      const extrasPrice = getExtrasPrice(item.extras);
+      return total + (item.price + extrasPrice) * item.quantity;
+    }, 0);
+
     setSubtotal(newSubtotal);
   }, [cart]);
 
@@ -58,6 +71,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           userId,
           paymentMethod: formData.paymentMethod,
+          phoneNumber: formData.phone,
           address: formData.address,
           items: cart,
         }),
@@ -70,18 +84,19 @@ export default function CheckoutPage() {
         throw new Error(result.message || "Update failed");
       }
 
-      setIsSubmitting(false);
-      toast.success("Order placed successfully! Your food is on the way.");
+      toast.success(result.message || "Order placed successfully!");
       clearCart();
       navigate("/");
     } catch (error) {
       console.error("Error creating order:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="bg-gray-900 text-white min-h-screen">
-      <div className="container mx-auto py-8 mt-14">
+      <div className="container mx-auto p-8 mt-14">
         <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -160,9 +175,8 @@ export default function CheckoutPage() {
                     required
                     className="w-full p-2 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-orange-500 cursor-pointer"
                   >
-                    <option value="cash_on_delivery">Cash on Delivery</option>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="paypal">PayPal</option>
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                    <option value="Credit Card">Credit Card</option>
                   </select>
                 </div>
 
@@ -188,7 +202,7 @@ export default function CheckoutPage() {
               <div className="space-y-4 mb-4">
                 {cart.map((item) => (
                   <div
-                    key={item.id}
+                    key={item.cartItemId}
                     className="border-b border-gray-700 pb-4 last:border-0"
                   >
                     <div className="flex justify-between">
@@ -196,13 +210,20 @@ export default function CheckoutPage() {
                         {item.quantity} × {item.name}
                       </span>
                       <span className="text-white">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        $
+                        {(
+                          (item.price + getExtrasPrice(item.extras)) *
+                          item.quantity
+                        ).toFixed(2)}
                       </span>
                     </div>
-                    {item.variation && (
-                      <p className="text-gray-500 text-sm mt-1">
-                        {item.variation}
-                      </p>
+
+                    {item.extras && (
+                      <ul className="text-sm text-gray-400 mt-1 ml-2">
+                        {item.extras.extraCheese && <li>• Extra Cheese</li>}
+                        {item.extras.spicySauce && <li>• Spicy Sauce</li>}
+                        {item.extras.makeItCombo && <li>• Combo</li>}
+                      </ul>
                     )}
                   </div>
                 ))}

@@ -12,7 +12,7 @@ export default function UserDashboard() {
   }
 
   return (
-    <div className="container mx-auto mt-14 p-8 bg-gray-900 text-white">
+    <div className="mt-14 p-8 bg-gray-900 text-white">
       <header className="mb-8">
         <button
           className={`mr-3 text-white font-medium bg-gray-700 rounded-md px-4 py-2 cursor-pointer transition duration-300 ${

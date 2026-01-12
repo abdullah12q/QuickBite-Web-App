@@ -5,7 +5,6 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 
 export default function UserOrders() {
   const userId = getUserId();
-  console.log(userId);
   const {
     data: orders,
     isPending,
@@ -37,8 +36,10 @@ export default function UserOrders() {
             >
               <div className="mb-4 border-b border-gray-600 pb-2">
                 <h2 className="text-xl font-bold text-orange-500 mb-1">
-                  Order ID: <span className="text-white">{order._id}</span>
+                  Order ID:{" "}
+                  <span className="text-white">{order._id.slice(-6)}</span>
                 </h2>
+                <p className="text-sm text-gray-400">Status: {order.status}</p>
                 <p className="text-sm text-gray-400">
                   Date:{" "}
                   {new Date(order.createdAt).toLocaleDateString("en-US", {
@@ -49,6 +50,12 @@ export default function UserOrders() {
                 </p>
                 <p className="text-sm text-gray-400">
                   Delivery Address: {order.address}
+                </p>
+                <p className="text-sm text-gray-400">
+                  Payment Method: {order.paymentMethod}
+                </p>
+                <p className="text-sm text-gray-400">
+                  Phone Number: {order.phoneNumber}
                 </p>
               </div>
 
@@ -91,5 +98,5 @@ export default function UserOrders() {
         <p className="text-center text-gray-400">No orders found.</p>
       );
   }
-  return <div className="bg-gray-700 p-8 rounded-lg max-w-6xl">{content}</div>;
+  return <div className="bg-gray-700 p-8 rounded-lg">{content}</div>;
 }

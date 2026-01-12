@@ -2,16 +2,29 @@ import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+const EXTRA_PRICES = {
+  extraCheese: 20,
+  spicySauce: 10,
+  makeItCombo: 50,
+};
+
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
 
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const getExtrasPrice = (extras = {}) => {
+    return Object.keys(extras).reduce((total, key) => {
+      return extras[key] ? total + EXTRA_PRICES[key] : total;
+    }, 0);
+  };
+
   useEffect(() => {
-    const newTotalPrice = cart.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+    const newTotalPrice = cart.reduce((total, item) => {
+      const extrasPrice = getExtrasPrice(item.extras);
+      return total + (item.price + extrasPrice) * item.quantity;
+    }, 0);
+
     setTotalPrice(newTotalPrice);
   }, [cart]);
 
@@ -31,7 +44,7 @@ export default function CartPage() {
 
   return (
     <div className="bg-gray-900 text-white">
-      <div className="container mx-auto py-8 mt-14">
+      <div className="container mx-auto p-8 mt-14">
         <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
 
         {isEmpty ? (
@@ -53,7 +66,7 @@ export default function CartPage() {
             <div className="md:w-3/4">
               {cart.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.cartItemId}
                   className="flex items-center justify-between bg-gray-800 rounded-lg p-4 mb-4"
                 >
                   {/* Item details */}
@@ -68,8 +81,23 @@ export default function CartPage() {
                       <p className="text-gray-400 text-sm">
                         {item.description}
                       </p>
+                      {item.extras && (
+                        <ul className="text-sm text-gray-400 mt-2">
+                          {item.extras.extraCheese && (
+                            <li>• Extra Cheese (+$20)</li>
+                          )}
+                          {item.extras.spicySauce && (
+                            <li>• Spicy Sauce (+$10)</li>
+                          )}
+                          {item.extras.makeItCombo && <li>• Combo (+$50)</li>}
+                        </ul>
+                      )}
+
                       <p className="text-orange-500">
-                        ${item.price.toFixed(2)}
+                        ${item.price.toFixed(2)} + $
+                        {getExtrasPrice(item.extras).toFixed(2)} = $
+                        {(item.price + getExtrasPrice(item.extras)).toFixed(2)}{" "}
+                        per item
                       </p>
                     </div>
                   </div>
@@ -79,9 +107,9 @@ export default function CartPage() {
                     <div className="flex items-center border border-gray-700 rounded-lg mr-4">
                       <button
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
+                          updateQuantity(item.cartItemId, item.quantity - 1)
                         }
-                        className="bg-gray-700 text-white px-3 py-2 rounded-l-lg hover:bg-gray-600 disabled:opacity-50 disabled:hover:bg-gray-700 cursor-pointer"
+                        className="bg-gray-700 text-white px-3 py-2 rounded-l-lg hover:bg-gray-600 disabled:opacity-50 disabled:hover:bg-gray-700 cursor-pointer disabled:cursor-not-allowed"
                         disabled={item.quantity === 1}
                       >
                         -
@@ -89,7 +117,7 @@ export default function CartPage() {
                       <span className="px-4">{item.quantity}</span>
                       <button
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
+                          updateQuantity(item.cartItemId, item.quantity + 1)
                         }
                         className="bg-gray-700 text-white px-3 py-2 rounded-r-lg hover:bg-gray-600 cursor-pointer"
                       >
@@ -99,12 +127,16 @@ export default function CartPage() {
 
                     {/* Total price for this item */}
                     <span className="font-bold">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      $
+                      {(
+                        (item.price + getExtrasPrice(item.extras)) *
+                        item.quantity
+                      ).toFixed(2)}
                     </span>
 
                     {/* Remove item button */}
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(item.cartItemId)}
                       className="text-red-500 hover:text-red-400 ml-4 cursor-pointer"
                     >
                       X

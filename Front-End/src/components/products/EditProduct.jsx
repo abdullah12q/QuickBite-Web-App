@@ -65,32 +65,30 @@ export default function EditProduct({ onDone, id }) {
           </div>
         )}
 
-        {product &&
-          (console.log(product),
-          (
-            <ProductForm onSubmit={handleSubmit} inputData={product}>
-              {isUpdating && (
-                <p className="text-gray-400 text-center">Updating product...</p>
-              )}
-              {!isUpdating && (
-                <div className="flex justify-end space-x-3">
-                  <button
-                    type="button"
-                    onClick={onDone}
-                    className="px-4 py-2 text-gray-300 hover:text-gray-100 font-medium text-sm transition-colors duration-150 cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-orange-500 text-white font-medium rounded-md hover:bg-orange-600 transition-colors duration-150 cursor-pointer"
-                  >
-                    Update Product
-                  </button>
-                </div>
-              )}
-            </ProductForm>
-          ))}
+        {product && (
+          <ProductForm onSubmit={handleSubmit} inputData={product}>
+            {isUpdating && (
+              <p className="text-gray-400 text-center">Updating product...</p>
+            )}
+            {!isUpdating && (
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={onDone}
+                  className="px-4 py-2 text-gray-300 hover:text-gray-100 font-medium text-sm transition-colors duration-150 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-orange-500 text-white font-medium rounded-md hover:bg-orange-600 transition-colors duration-150 cursor-pointer"
+                >
+                  Update Product
+                </button>
+              </div>
+            )}
+          </ProductForm>
+        )}
 
         {isUpdateError && (
           <div className="py-6 text-center bg-gray-900 rounded-md">

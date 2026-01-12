@@ -28,7 +28,7 @@ export default function MainNavigation() {
         <ul className="flex items-center gap-5">
           <motion.li
             whileHover={{ scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 400 }}
+            transition={{ type: "spring" }}
           >
             <NavLink
               to="/"
@@ -45,7 +45,7 @@ export default function MainNavigation() {
           {!isAdmin && (
             <motion.li
               whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 400 }}
+              transition={{ type: "spring" }}
             >
               <NavLink
                 to="/cart"
@@ -62,10 +62,7 @@ export default function MainNavigation() {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, x: 0, y: 0 }}
                     exit={{ opacity: 0, y: -50 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                    }}
+                    transition={{ type: "spring" }}
                     className="inline-block"
                   >
                     {cartCount}
@@ -79,7 +76,7 @@ export default function MainNavigation() {
             <>
               <motion.button
                 whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                transition={{ type: "spring" }}
               >
                 <Link
                   to="/auth?mode=login"
@@ -90,7 +87,7 @@ export default function MainNavigation() {
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                transition={{ type: "spring" }}
                 className="bg-orange-500 text-gray-300 px-4 py-2 rounded-md hover:bg-orange-600"
               >
                 <Link to="/auth?mode=register">Register</Link>
@@ -100,7 +97,7 @@ export default function MainNavigation() {
           {token && !isAdmin && (
             <motion.li
               whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 400 }}
+              transition={{ type: "spring" }}
             >
               <NavLink
                 to="/user/dashboard"
@@ -117,7 +114,7 @@ export default function MainNavigation() {
           {isAdmin && (
             <motion.li
               whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 400 }}
+              transition={{ type: "spring" }}
             >
               <NavLink
                 to="/admin/dashboard"
@@ -135,7 +132,7 @@ export default function MainNavigation() {
             <Form method="post" action="/logout">
               <motion.button
                 whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                transition={{ type: "spring" }}
                 className="text-gray-400 hover:text-orange-500 cursor-pointer"
                 onClick={clearCart}
               >

@@ -22,6 +22,11 @@ export default function AuthPage() {
   }
 
   function handleSubmit(values, actions) {
+    const formData = { ...values };
+    if (formData.role === "customer") {
+      delete formData.vehicleType;
+      delete formData.licenseNumber;
+    }
     mutate(
       { mode, formData: values },
       {
@@ -96,6 +101,9 @@ export default function AuthPage() {
       email: "",
       password: "",
       confirmPassword: "",
+      role: "customer",
+      vehicleType: "bicycle",
+      licenseNumber: "",
     };
   }
 

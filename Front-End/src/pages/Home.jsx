@@ -12,7 +12,6 @@ export default function HomePage() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{
           type: "spring",
-          stiffness: 500,
           delay: 0.5,
         }}
         viewport={{ once: true }}

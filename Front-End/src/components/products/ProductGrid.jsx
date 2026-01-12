@@ -68,18 +68,20 @@ export default function ProductGrid() {
     emptyMessage = "No products found matching your search.";
   }
 
-  if (displayProducts.length > 0) {
+  if (displayProducts.filter((product) => product.avalability).length > 0) {
     content = (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         <AnimatePresence>
-          {displayProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {displayProducts
+            .filter((product) => product.avalability)
+            .map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
         </AnimatePresence>
       </div>
     );
   } else if (
-    displayProducts.length === 0 &&
+    displayProducts.filter((product) => product.avalability).length === 0 &&
     (debouncedSearchTerm || activeCategory)
   ) {
     content = (
@@ -122,7 +124,7 @@ export default function ProductGrid() {
           placeholder="Search for a product"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-3 mr-12 rounded-md bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition duration-300"
+          className="pl-3 mr-12 rounded-xl bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:outline-none transition duration-300"
         />
       </div>
       {(isSearchLoading || isPending) && <LoadingSpinner />}

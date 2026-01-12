@@ -3,8 +3,6 @@ import { getAuthToken } from "./auth";
 
 export const queryClient = new QueryClient();
 
-const token = getAuthToken();
-
 export async function authenticate({ mode, formData }) {
   try {
     if (mode !== "login" && mode !== "register") {
@@ -39,7 +37,6 @@ export async function getProducts(searchTerm = "") {
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      console.log("data.message:", data.message);
       throw new Error(data.message || "Failed to fetch products");
     }
 
@@ -51,6 +48,7 @@ export async function getProducts(searchTerm = "") {
       price: product.Price,
       image: `http://localhost:5050/images/${product.Image}`,
       description: product.Description,
+      avalability: product.Avalability,
     }));
 
     if (searchTerm) {
@@ -88,6 +86,7 @@ export async function getProduct(id) {
       price: product.Price,
       image: `http://localhost:5050/images/${product.Image}`,
       description: product.Description,
+      avalability: product.Avalability,
     };
 
     return fixedProduct;
@@ -97,6 +96,8 @@ export async function getProduct(id) {
 }
 
 export async function addProduct(formData) {
+  const token = getAuthToken();
+
   try {
     const response = await fetch("http://localhost:5050/api/product/add", {
       method: "POST",
@@ -119,6 +120,8 @@ export async function addProduct(formData) {
 }
 
 export async function updateProduct({ id, formData }) {
+  const token = getAuthToken();
+
   try {
     const response = await fetch(
       `http://localhost:5050/api/product/update?id=${id}`,
@@ -144,6 +147,8 @@ export async function updateProduct({ id, formData }) {
 }
 
 export async function deleteProduct(id) {
+  const token = getAuthToken();
+
   try {
     const response = await fetch(
       `http://localhost:5050/api/product/delete?id=${id}`,
@@ -165,7 +170,33 @@ export async function deleteProduct(id) {
   }
 }
 
+export async function updateAvalability(id) {
+  const token = getAuthToken();
+
+  try {
+    const response = await fetch(
+      `http://localhost:5050/api/product/updateAvalability?id=${id}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to update Avalability");
+    }
+  } catch (error) {
+    throw new Error("Could not update Avalability: " + error.message);
+  }
+}
+
 export async function getUserOrders(userId) {
+  const token = getAuthToken();
+
   try {
     const response = await fetch(
       `http://localhost:5050/order/getUserOrders?userId=${userId}`,
@@ -186,4 +217,60 @@ export async function getUserOrders(userId) {
   } catch (error) {
     throw new Error("Could not fetch orders: " + error.message);
   }
+}
+
+export async function getAllOrders() {
+  const response = await fetch("http://localhost:5050/order/getAllOrders");
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to fetch orders");
+  }
+
+  const resData = await response.json();
+  return resData.orders;
+}
+
+export async function updateOrderStatus({ orderId, status }) {
+  const response = await fetch("http://localhost:5050/order/status", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ orderId, status }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update order status");
+  }
+
+  return response.json();
+}
+
+export async function getAllUsers() {
+  const response = await fetch("http://localhost:5050/auth/getAllUsers");
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to fetch users");
+  }
+  const resData = await response.json();
+  return resData.users;
+}
+
+export async function toggleUserAvailability({ userId }) {
+  const response = await fetch(
+    `http://localhost:5050/auth/toggleUserAvailability`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update availability");
+  }
+  return response.json();
 }
